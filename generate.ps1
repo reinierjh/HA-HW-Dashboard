@@ -259,19 +259,21 @@ $dash.Add('    type: sections')
 $dash.Add('    sections:')
 
 $cols = @('24h', '7d', 'weekly', 'monthly', 'quarterly', 'yearly', 'alltime')
-$dash.Add('      - type: markdown')
-$dash.Add('        content: |-')
-$dash.Add("          {% macro pct(v) %}{% if v not in ['unknown', 'unavailable', 'none', ''] %}{{ v }}{% else %}&#8211;{% endif %}{% endmacro %}")
-$head = '          | Batterij'
+$dash.Add('      - type: grid')
+$dash.Add('        cards:')
+$dash.Add('          - type: markdown')
+$dash.Add('            content: |-')
+$dash.Add("              {% macro pct(v) %}{% if v not in ['unknown', 'unavailable', 'none', ''] %}{{ v }}{% else %}&#8211;{% endif %}{% endmacro %}")
+$head = '              | Batterij'
 foreach ($c in $cols) { $head += " | $c" }
 $dash.Add($head + ' |')
-$dash.Add('          |' + ('---|' * ($cols.Count + 1)))
+$dash.Add('              |' + ('---|' * ($cols.Count + 1)))
 foreach ($b in $batteries) {
-  $row = "          | Batterij $($b.Id)"
+  $row = "              | Batterij $($b.Id)"
   foreach ($c in $cols) { $row += " | {{ pct(states('sensor.batt$($b.Id)_rte_$c')) }}" }
   $dash.Add($row + ' |')
 }
-$row = '          | Totaal'
+$row = '              | Totaal'
 foreach ($c in $cols) { $row += " | {{ pct(states('sensor.totaal_rte_$c')) }}" }
 $dash.Add($row + ' |')
 
