@@ -1,0 +1,605 @@
+# HomeWizard batterijen - RTE (round-trip efficiency)
+# Hybride: 24h/7d rolling + SOC-correctie (statistics), weekly..yearly kalender (utility_meter)
+# Werkt zonder lange recorder-retentie (purge_keep_days kan laag blijven, bv. 7 dagen).
+# Plaats dit bestand in config/packages/ en voeg toe aan configuration.yaml:
+#   homeassistant:
+#     packages: !include_dir_named packages
+homewizard_rte_package:
+
+  sensor:
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_1_energy_import
+      name: batt1_import_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_1_energy_export
+      name: batt1_export_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_1_state_of_charge
+      name: batt1_soc_delta_24h
+      state_characteristic: change
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_1_energy_import
+      name: batt1_import_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_1_energy_export
+      name: batt1_export_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_1_state_of_charge
+      name: batt1_soc_delta_7d
+      state_characteristic: change
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_2_energy_import
+      name: batt2_import_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_2_energy_export
+      name: batt2_export_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_2_state_of_charge
+      name: batt2_soc_delta_24h
+      state_characteristic: change
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_2_energy_import
+      name: batt2_import_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_2_energy_export
+      name: batt2_export_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_2_state_of_charge
+      name: batt2_soc_delta_7d
+      state_characteristic: change
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_3_energy_import
+      name: batt3_import_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_3_energy_export
+      name: batt3_export_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_3_state_of_charge
+      name: batt3_soc_delta_24h
+      state_characteristic: change
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_3_energy_import
+      name: batt3_import_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_3_energy_export
+      name: batt3_export_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_3_state_of_charge
+      name: batt3_soc_delta_7d
+      state_characteristic: change
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_4_energy_import
+      name: batt4_import_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_4_energy_export
+      name: batt4_export_24h
+      state_characteristic: sum_differences
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_4_state_of_charge
+      name: batt4_soc_delta_24h
+      state_characteristic: change
+      max_age:
+        hours: 24
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_4_energy_import
+      name: batt4_import_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_4_energy_export
+      name: batt4_export_7d
+      state_characteristic: sum_differences
+      max_age:
+        days: 7
+    - platform: statistics
+      entity_id: sensor.plug_in_battery_4_state_of_charge
+      name: batt4_soc_delta_7d
+      state_characteristic: change
+      max_age:
+        days: 7
+
+  utility_meter:
+    batt1_import_weekly:
+      source: sensor.plug_in_battery_1_energy_import
+      cycle: weekly
+    batt1_export_weekly:
+      source: sensor.plug_in_battery_1_energy_export
+      cycle: weekly
+    batt1_import_monthly:
+      source: sensor.plug_in_battery_1_energy_import
+      cycle: monthly
+    batt1_export_monthly:
+      source: sensor.plug_in_battery_1_energy_export
+      cycle: monthly
+    batt1_import_quarterly:
+      source: sensor.plug_in_battery_1_energy_import
+      cycle: quarterly
+    batt1_export_quarterly:
+      source: sensor.plug_in_battery_1_energy_export
+      cycle: quarterly
+    batt1_import_yearly:
+      source: sensor.plug_in_battery_1_energy_import
+      cycle: yearly
+    batt1_export_yearly:
+      source: sensor.plug_in_battery_1_energy_export
+      cycle: yearly
+    batt2_import_weekly:
+      source: sensor.plug_in_battery_2_energy_import
+      cycle: weekly
+    batt2_export_weekly:
+      source: sensor.plug_in_battery_2_energy_export
+      cycle: weekly
+    batt2_import_monthly:
+      source: sensor.plug_in_battery_2_energy_import
+      cycle: monthly
+    batt2_export_monthly:
+      source: sensor.plug_in_battery_2_energy_export
+      cycle: monthly
+    batt2_import_quarterly:
+      source: sensor.plug_in_battery_2_energy_import
+      cycle: quarterly
+    batt2_export_quarterly:
+      source: sensor.plug_in_battery_2_energy_export
+      cycle: quarterly
+    batt2_import_yearly:
+      source: sensor.plug_in_battery_2_energy_import
+      cycle: yearly
+    batt2_export_yearly:
+      source: sensor.plug_in_battery_2_energy_export
+      cycle: yearly
+    batt3_import_weekly:
+      source: sensor.plug_in_battery_3_energy_import
+      cycle: weekly
+    batt3_export_weekly:
+      source: sensor.plug_in_battery_3_energy_export
+      cycle: weekly
+    batt3_import_monthly:
+      source: sensor.plug_in_battery_3_energy_import
+      cycle: monthly
+    batt3_export_monthly:
+      source: sensor.plug_in_battery_3_energy_export
+      cycle: monthly
+    batt3_import_quarterly:
+      source: sensor.plug_in_battery_3_energy_import
+      cycle: quarterly
+    batt3_export_quarterly:
+      source: sensor.plug_in_battery_3_energy_export
+      cycle: quarterly
+    batt3_import_yearly:
+      source: sensor.plug_in_battery_3_energy_import
+      cycle: yearly
+    batt3_export_yearly:
+      source: sensor.plug_in_battery_3_energy_export
+      cycle: yearly
+    batt4_import_weekly:
+      source: sensor.plug_in_battery_4_energy_import
+      cycle: weekly
+    batt4_export_weekly:
+      source: sensor.plug_in_battery_4_energy_export
+      cycle: weekly
+    batt4_import_monthly:
+      source: sensor.plug_in_battery_4_energy_import
+      cycle: monthly
+    batt4_export_monthly:
+      source: sensor.plug_in_battery_4_energy_export
+      cycle: monthly
+    batt4_import_quarterly:
+      source: sensor.plug_in_battery_4_energy_import
+      cycle: quarterly
+    batt4_export_quarterly:
+      source: sensor.plug_in_battery_4_energy_export
+      cycle: quarterly
+    batt4_import_yearly:
+      source: sensor.plug_in_battery_4_energy_import
+      cycle: yearly
+    batt4_export_yearly:
+      source: sensor.plug_in_battery_4_energy_export
+      cycle: yearly
+
+  template:
+    - sensor:
+        - name: batt1_rte_24h
+          unique_id: batt1_rte_24h
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt1_import_24h') | float(0) %}
+            {% set e = states('sensor.batt1_export_24h') | float(0) %}
+            {% set s = states('sensor.batt1_soc_delta_24h') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt1_rte_7d
+          unique_id: batt1_rte_7d
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt1_import_7d') | float(0) %}
+            {% set e = states('sensor.batt1_export_7d') | float(0) %}
+            {% set s = states('sensor.batt1_soc_delta_7d') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt1_rte_weekly
+          unique_id: batt1_rte_weekly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_weekly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_weekly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt1_rte_monthly
+          unique_id: batt1_rte_monthly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_monthly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_monthly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt1_rte_quarterly
+          unique_id: batt1_rte_quarterly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_quarterly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_quarterly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt1_rte_yearly
+          unique_id: batt1_rte_yearly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_yearly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_yearly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt2_rte_24h
+          unique_id: batt2_rte_24h
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt2_import_24h') | float(0) %}
+            {% set e = states('sensor.batt2_export_24h') | float(0) %}
+            {% set s = states('sensor.batt2_soc_delta_24h') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt2_rte_7d
+          unique_id: batt2_rte_7d
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt2_import_7d') | float(0) %}
+            {% set e = states('sensor.batt2_export_7d') | float(0) %}
+            {% set s = states('sensor.batt2_soc_delta_7d') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt2_rte_weekly
+          unique_id: batt2_rte_weekly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt2_import_weekly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt2_export_weekly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt2_rte_monthly
+          unique_id: batt2_rte_monthly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt2_import_monthly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt2_export_monthly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt2_rte_quarterly
+          unique_id: batt2_rte_quarterly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt2_import_quarterly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt2_export_quarterly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt2_rte_yearly
+          unique_id: batt2_rte_yearly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt2_import_yearly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt2_export_yearly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt3_rte_24h
+          unique_id: batt3_rte_24h
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt3_import_24h') | float(0) %}
+            {% set e = states('sensor.batt3_export_24h') | float(0) %}
+            {% set s = states('sensor.batt3_soc_delta_24h') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt3_rte_7d
+          unique_id: batt3_rte_7d
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt3_import_7d') | float(0) %}
+            {% set e = states('sensor.batt3_export_7d') | float(0) %}
+            {% set s = states('sensor.batt3_soc_delta_7d') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt3_rte_weekly
+          unique_id: batt3_rte_weekly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt3_import_weekly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt3_export_weekly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt3_rte_monthly
+          unique_id: batt3_rte_monthly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt3_import_monthly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt3_export_monthly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt3_rte_quarterly
+          unique_id: batt3_rte_quarterly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt3_import_quarterly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt3_export_quarterly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt3_rte_yearly
+          unique_id: batt3_rte_yearly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt3_import_yearly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt3_export_yearly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt4_rte_24h
+          unique_id: batt4_rte_24h
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt4_import_24h') | float(0) %}
+            {% set e = states('sensor.batt4_export_24h') | float(0) %}
+            {% set s = states('sensor.batt4_soc_delta_24h') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt4_rte_7d
+          unique_id: batt4_rte_7d
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.batt4_import_7d') | float(0) %}
+            {% set e = states('sensor.batt4_export_7d') | float(0) %}
+            {% set s = states('sensor.batt4_soc_delta_7d') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: batt4_rte_weekly
+          unique_id: batt4_rte_weekly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt4_import_weekly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt4_export_weekly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt4_rte_monthly
+          unique_id: batt4_rte_monthly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt4_import_monthly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt4_export_monthly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt4_rte_quarterly
+          unique_id: batt4_rte_quarterly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt4_import_quarterly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt4_export_quarterly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt4_rte_yearly
+          unique_id: batt4_rte_yearly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = state_attr('sensor.batt4_import_yearly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt4_export_yearly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: totaal_rte_24h
+          unique_id: totaal_rte_24h
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = states('sensor.batt1_import_24h') | float(0) + states('sensor.batt2_import_24h') | float(0) + states('sensor.batt3_import_24h') | float(0) + states('sensor.batt4_import_24h') | float(0) %}
+            {% set e = states('sensor.batt1_export_24h') | float(0) + states('sensor.batt2_export_24h') | float(0) + states('sensor.batt3_export_24h') | float(0) + states('sensor.batt4_export_24h') | float(0) %}
+            {% set s = states('sensor.batt1_soc_delta_24h') | float(0) + states('sensor.batt2_soc_delta_24h') | float(0) + states('sensor.batt3_soc_delta_24h') | float(0) + states('sensor.batt4_soc_delta_24h') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: totaal_rte_7d
+          unique_id: totaal_rte_7d
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = states('sensor.batt1_import_7d') | float(0) + states('sensor.batt2_import_7d') | float(0) + states('sensor.batt3_import_7d') | float(0) + states('sensor.batt4_import_7d') | float(0) %}
+            {% set e = states('sensor.batt1_export_7d') | float(0) + states('sensor.batt2_export_7d') | float(0) + states('sensor.batt3_export_7d') | float(0) + states('sensor.batt4_export_7d') | float(0) %}
+            {% set s = states('sensor.batt1_soc_delta_7d') | float(0) + states('sensor.batt2_soc_delta_7d') | float(0) + states('sensor.batt3_soc_delta_7d') | float(0) + states('sensor.batt4_soc_delta_7d') | float(0) %}
+            {% set de = s / 100 * 2.473 %}
+            {% set den = i - de %}
+            {% if den > 0 %}
+              {% set rte = e / den * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
+        - name: totaal_rte_weekly
+          unique_id: totaal_rte_weekly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_weekly', 'last_period') | float(0) + state_attr('sensor.batt2_import_weekly', 'last_period') | float(0) + state_attr('sensor.batt3_import_weekly', 'last_period') | float(0) + state_attr('sensor.batt4_import_weekly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_weekly', 'last_period') | float(0) + state_attr('sensor.batt2_export_weekly', 'last_period') | float(0) + state_attr('sensor.batt3_export_weekly', 'last_period') | float(0) + state_attr('sensor.batt4_export_weekly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: totaal_rte_monthly
+          unique_id: totaal_rte_monthly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_monthly', 'last_period') | float(0) + state_attr('sensor.batt2_import_monthly', 'last_period') | float(0) + state_attr('sensor.batt3_import_monthly', 'last_period') | float(0) + state_attr('sensor.batt4_import_monthly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_monthly', 'last_period') | float(0) + state_attr('sensor.batt2_export_monthly', 'last_period') | float(0) + state_attr('sensor.batt3_export_monthly', 'last_period') | float(0) + state_attr('sensor.batt4_export_monthly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: totaal_rte_quarterly
+          unique_id: totaal_rte_quarterly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_quarterly', 'last_period') | float(0) + state_attr('sensor.batt2_import_quarterly', 'last_period') | float(0) + state_attr('sensor.batt3_import_quarterly', 'last_period') | float(0) + state_attr('sensor.batt4_import_quarterly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_quarterly', 'last_period') | float(0) + state_attr('sensor.batt2_export_quarterly', 'last_period') | float(0) + state_attr('sensor.batt3_export_quarterly', 'last_period') | float(0) + state_attr('sensor.batt4_export_quarterly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: totaal_rte_yearly
+          unique_id: totaal_rte_yearly
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = state_attr('sensor.batt1_import_yearly', 'last_period') | float(0) + state_attr('sensor.batt2_import_yearly', 'last_period') | float(0) + state_attr('sensor.batt3_import_yearly', 'last_period') | float(0) + state_attr('sensor.batt4_import_yearly', 'last_period') | float(0) %}
+            {% set e = state_attr('sensor.batt1_export_yearly', 'last_period') | float(0) + state_attr('sensor.batt2_export_yearly', 'last_period') | float(0) + state_attr('sensor.batt3_export_yearly', 'last_period') | float(0) + state_attr('sensor.batt4_export_yearly', 'last_period') | float(0) %}
+            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+
+# ============================================================
+# TOELICHTING
+# ============================================================
+# 24h/7d: rolling windows via statistics-platform, met SOC-correctie:
+#   RTE = export / (import - dE) * 100,  dE = (SoC_eind - SoC_begin)/100 * 2,473 kWh
+#   Dit corrigeert voor het feit dat de accu aan het begin/einde van het venster
+#   niet even gevuld hoeft te zijn (was de oorzaak van bizar hoge waarden).
+#
+# weekly..yearly: kalenderperiodes via utility_meter. last_period wordt door de
+#   meter zelf bijgehouden en na een restart hersteld uit de restore-data in de DB,
+#   dus zonder lange ruwe history -> werkt ook met purge_keep_days: 7.
+#   Over zulke lange periodes is SOC-correctie niet nodig (grensafwijking is
+#   verwaarloosbaar t.o.v. de totale doorloop).
+#
+# Let op: er zijn GEEN 30d/90d/365d rolling windows mogelijk met een korte
+# recorder-retentie (de statistics-sensor leest alleen ruwe history).
+#
+# Verwijder na de eerste installatie eventueel oude entity-registraties
+# (*_rte_30d/90d/365d en *_soc_delta_30d/90d/365d) als die niet meer bestaan:
+#   Instellingen > Apparaten en diensten > Entiteiten > Verwijderen

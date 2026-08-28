@@ -1,0 +1,361 @@
+views:
+  - title: RTE overzicht
+    path: rte_overzicht
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 1
+            heading_style: title
+          - type: sensor
+            entity: sensor.batt1_rte_24h
+            name: RTE 24h
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt1_rte_7d
+            name: RTE 7d
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt1_rte_weekly
+            name: RTE weekly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt1_rte_monthly
+            name: RTE monthly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt1_rte_quarterly
+            name: RTE quarterly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt1_rte_yearly
+            name: RTE yearly
+            unit: '%'
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 2
+            heading_style: title
+          - type: sensor
+            entity: sensor.batt2_rte_24h
+            name: RTE 24h
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt2_rte_7d
+            name: RTE 7d
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt2_rte_weekly
+            name: RTE weekly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt2_rte_monthly
+            name: RTE monthly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt2_rte_quarterly
+            name: RTE quarterly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt2_rte_yearly
+            name: RTE yearly
+            unit: '%'
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 3
+            heading_style: title
+          - type: sensor
+            entity: sensor.batt3_rte_24h
+            name: RTE 24h
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt3_rte_7d
+            name: RTE 7d
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt3_rte_weekly
+            name: RTE weekly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt3_rte_monthly
+            name: RTE monthly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt3_rte_quarterly
+            name: RTE quarterly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt3_rte_yearly
+            name: RTE yearly
+            unit: '%'
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 4
+            heading_style: title
+          - type: sensor
+            entity: sensor.batt4_rte_24h
+            name: RTE 24h
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt4_rte_7d
+            name: RTE 7d
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt4_rte_weekly
+            name: RTE weekly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt4_rte_monthly
+            name: RTE monthly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt4_rte_quarterly
+            name: RTE quarterly
+            unit: '%'
+          - type: sensor
+            entity: sensor.batt4_rte_yearly
+            name: RTE yearly
+            unit: '%'
+      - type: grid
+        cards:
+          - type: heading
+            heading: Totaal
+            heading_style: title
+          - type: sensor
+            entity: sensor.totaal_rte_24h
+            name: RTE 24h
+            unit: '%'
+          - type: sensor
+            entity: sensor.totaal_rte_7d
+            name: RTE 7d
+            unit: '%'
+          - type: sensor
+            entity: sensor.totaal_rte_weekly
+            name: RTE weekly
+            unit: '%'
+          - type: sensor
+            entity: sensor.totaal_rte_monthly
+            name: RTE monthly
+            unit: '%'
+          - type: sensor
+            entity: sensor.totaal_rte_quarterly
+            name: RTE quarterly
+            unit: '%'
+          - type: sensor
+            entity: sensor.totaal_rte_yearly
+            name: RTE yearly
+            unit: '%'
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header: { show: true, title: 'RTE 24h' }
+            graph_span: 45d
+            yaxis:
+              - min: 0
+                max: 110
+            series:
+              - entity: sensor.batt1_rte_24h
+                name: Batterij 1
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt2_rte_24h
+                name: Batterij 2
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt3_rte_24h
+                name: Batterij 3
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt4_rte_24h
+                name: Batterij 4
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.totaal_rte_24h
+                name: Totaal
+                group_by:
+                  func: last
+                  duration: 1d
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header: { show: true, title: 'RTE 7d' }
+            graph_span: 90d
+            yaxis:
+              - min: 0
+                max: 110
+            series:
+              - entity: sensor.batt1_rte_7d
+                name: Batterij 1
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt2_rte_7d
+                name: Batterij 2
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt3_rte_7d
+                name: Batterij 3
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt4_rte_7d
+                name: Batterij 4
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.totaal_rte_7d
+                name: Totaal
+                group_by:
+                  func: last
+                  duration: 1d
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header: { show: true, title: 'RTE weekly' }
+            graph_span: 300d
+            yaxis:
+              - min: 0
+                max: 110
+            series:
+              - entity: sensor.batt1_rte_weekly
+                name: Batterij 1
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt2_rte_weekly
+                name: Batterij 2
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt3_rte_weekly
+                name: Batterij 3
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt4_rte_weekly
+                name: Batterij 4
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.totaal_rte_weekly
+                name: Totaal
+                group_by:
+                  func: last
+                  duration: 1d
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header: { show: true, title: 'RTE monthly' }
+            graph_span: 12month
+            yaxis:
+              - min: 0
+                max: 110
+            series:
+              - entity: sensor.batt1_rte_monthly
+                name: Batterij 1
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt2_rte_monthly
+                name: Batterij 2
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt3_rte_monthly
+                name: Batterij 3
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt4_rte_monthly
+                name: Batterij 4
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.totaal_rte_monthly
+                name: Totaal
+                group_by:
+                  func: last
+                  duration: 1d
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header: { show: true, title: 'RTE quarterly' }
+            graph_span: 24month
+            yaxis:
+              - min: 0
+                max: 110
+            series:
+              - entity: sensor.batt1_rte_quarterly
+                name: Batterij 1
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt2_rte_quarterly
+                name: Batterij 2
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt3_rte_quarterly
+                name: Batterij 3
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt4_rte_quarterly
+                name: Batterij 4
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.totaal_rte_quarterly
+                name: Totaal
+                group_by:
+                  func: last
+                  duration: 1d
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header: { show: true, title: 'RTE yearly' }
+            graph_span: 5year
+            yaxis:
+              - min: 0
+                max: 110
+            series:
+              - entity: sensor.batt1_rte_yearly
+                name: Batterij 1
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt2_rte_yearly
+                name: Batterij 2
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt3_rte_yearly
+                name: Batterij 3
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.batt4_rte_yearly
+                name: Batterij 4
+                group_by:
+                  func: last
+                  duration: 1d
+              - entity: sensor.totaal_rte_yearly
+                name: Totaal
+                group_by:
+                  func: last
+                  duration: 1d
+      - type: grid
+        cards:
+          - type: markdown
+            content: >-
+              **RTE** = round-trip efficiency: (ontladen kWh / laden kWh) x 100%.
+              <br>24h & 7d: rolling windows met SOC-correctie (rekent accu-energie mee).
+              <br>Weekly t/m yearly: kalenderperiodes via utility_meter (last period).
