@@ -12,6 +12,8 @@ $ErrorActionPreference = 'Stop'
 #   dE = (SoC_eind - SoC_begin)/100 * capaciteit
 #   positief dE (netto geladen) => deel van import blijft in accu => noemer kleiner.
 # Capaciteit per batterij: 2,473 kWh bruikbaar (4x = 9,89 kWh).
+# all_time -> lifetime totalen (native energy_import/export, cumulatief sinds installatie).
+#   Geen history of SOC-correctie nodig; werkt dus altijd, ook met korte retentie.
 # ============================================================
 
 $batteries = @(
@@ -145,6 +147,18 @@ foreach ($b in $batteries) {
     $pkg.Add('            {% set e = e_last if i_last > 0 else e_cur %}')
     $pkg.Add('            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}')
   }
+  $pkg.Add("        - name: batt$($b.Id)_rte_alltime")
+  $pkg.Add("          unique_id: batt$($b.Id)_rte_alltime")
+  $pkg.Add('          state_class: measurement')
+  $pkg.Add("          unit_of_measurement: '%'")
+  $pkg.Add('          icon: mdi:battery-charging-outline')
+  $pkg.Add('          state: >-')
+  $pkg.Add("            {% set i = states('$($b.Import)') | float(0) %}")
+  $pkg.Add("            {% set e = states('$($b.Export)') | float(0) %}")
+  $pkg.Add('            {% if i > 0 %}')
+  $pkg.Add('              {% set rte = e / i * 100 %}')
+  $pkg.Add('              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}')
+  $pkg.Add('            {% else %}unknown{% endif %}')
 }
 
 foreach ($w in $roll) {
@@ -187,6 +201,22 @@ foreach ($m in $meters) {
   $pkg.Add('            {% set e = e_last if i_last > 0 else e_cur %}')
   $pkg.Add('            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}')
 }
+
+$impsAll = ($batteries | ForEach-Object { "states('$($_.Import)') | float(0)" }) -join ' + '
+$expsAll = ($batteries | ForEach-Object { "states('$($_.Export)') | float(0)" }) -join ' + '
+$pkg.Add("        - name: totaal_rte_alltime")
+$pkg.Add("          unique_id: totaal_rte_alltime")
+$pkg.Add('          state_class: measurement')
+$pkg.Add("          unit_of_measurement: '%'")
+$pkg.Add('          icon: mdi:chart-donut')
+$pkg.Add('          state: >-')
+$pkg.Add("            {% set i = $impsAll %}")
+$pkg.Add("            {% set e = $expsAll %}")
+$pkg.Add('            {% if i > 0 %}')
+$pkg.Add('              {% set rte = e / i * 100 %}')
+$pkg.Add('              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}')
+$pkg.Add('            {% else %}unknown{% endif %}')
+
 $pkg.Add('')
 $pkg.Add('# ============================================================')
 $pkg.Add('# TOELICHTING')
@@ -211,6 +241,10 @@ $pkg.Add('#')
 $pkg.Add('# Let op: er zijn GEEN 30d/90d/365d rolling windows mogelijk met een korte')
 $pkg.Add('# recorder-retentie (de statistics-sensor leest alleen ruwe history).')
 $pkg.Add('#')
+$pkg.Add('# all_time: lifetime totalen (native energy_import/export, cumulatief sinds')
+$pkg.Add('#   installatie). Geen history of SOC-correctie nodig -> altijd geldig,')
+$pkg.Add('#   onafhankelijk van purge_keep_days.')
+$pkg.Add('#')
 $pkg.Add('# Verwijder na de eerste installatie eventueel oude entity-registraties')
 $pkg.Add('# (*_rte_30d/90d/365d en *_soc_delta_30d/90d/365d) als die niet meer bestaan:')
 $pkg.Add('#   Instellingen > Apparaten en diensten > Entiteiten > Verwijderen')
@@ -224,31 +258,22 @@ $dash.Add('    path: rte_overzicht')
 $dash.Add('    type: sections')
 $dash.Add('    sections:')
 
+$cols = @('24h', '7d', 'weekly', 'monthly', 'quarterly', 'yearly', 'alltime')
+$dash.Add('      - type: markdown')
+$dash.Add('        content: |-')
+$dash.Add("          {% macro pct(v) %}{% if v not in ['unknown', 'unavailable', 'none', ''] %}{{ v }}{% else %}&#8211;{% endif %}{% endmacro %}")
+$head = '          | Batterij'
+foreach ($c in $cols) { $head += " | $c" }
+$dash.Add($head + ' |')
+$dash.Add('          |' + ('---|' * ($cols.Count + 1)))
 foreach ($b in $batteries) {
-$dash.Add('      - type: grid')
-$dash.Add('        cards:')
-$dash.Add('          - type: heading')
-$dash.Add("            heading: Batterij $($b.Id)")
-$dash.Add('            heading_style: title')
-foreach ($p in $periods) {
-  $dash.Add('          - type: sensor')
-  $dash.Add("            entity: sensor.batt$($b.Id)_rte_$($p.Key)")
-  $dash.Add("            name: RTE $($p.Key)")
-  $dash.Add("            unit: '%'")
+  $row = "          | Batterij $($b.Id)"
+  foreach ($c in $cols) { $row += " | {{ pct(states('sensor.batt$($b.Id)_rte_$c')) }}" }
+  $dash.Add($row + ' |')
 }
-}
-
-$dash.Add('      - type: grid')
-$dash.Add('        cards:')
-$dash.Add('          - type: heading')
-$dash.Add('            heading: Totaal')
-$dash.Add('            heading_style: title')
-foreach ($p in $periods) {
-  $dash.Add('          - type: sensor')
-  $dash.Add("            entity: sensor.totaal_rte_$($p.Key)")
-  $dash.Add("            name: RTE $($p.Key)")
-  $dash.Add("            unit: '%'")
-}
+$row = '          | Totaal'
+foreach ($c in $cols) { $row += " | {{ pct(states('sensor.totaal_rte_$c')) }}" }
+$dash.Add($row + ' |')
 
 foreach ($p in $periods) {
   $dash.Add('      - type: grid')
@@ -289,6 +314,7 @@ $dash.Add('            content: >-')
 $dash.Add('              **RTE** = round-trip efficiency: (ontladen kWh / laden kWh) x 100%.')
 $dash.Add('              <br>24h & 7d: rolling windows met SOC-correctie (rekent accu-energie mee).')
 $dash.Add('              <br>Weekly t/m yearly: kalenderperiodes via utility_meter (last period).')
+$dash.Add('              <br>All-time: lifetime totalen van de meter (geen history nodig).')
 
 Write-Utf8NoBom (Join-Path $outDir 'rte_dashboard.yaml') ($dash -join "`n")
 

@@ -390,6 +390,18 @@ homewizard_rte_package:
             {% set i = i_last if i_last > 0 else i_cur %}
             {% set e = e_last if i_last > 0 else e_cur %}
             {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt1_rte_alltime
+          unique_id: batt1_rte_alltime
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.plug_in_battery_1_energy_import') | float(0) %}
+            {% set e = states('sensor.plug_in_battery_1_energy_export') | float(0) %}
+            {% if i > 0 %}
+              {% set rte = e / i * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
         - name: batt2_rte_24h
           unique_id: batt2_rte_24h
           state_class: measurement
@@ -472,6 +484,18 @@ homewizard_rte_package:
             {% set i = i_last if i_last > 0 else i_cur %}
             {% set e = e_last if i_last > 0 else e_cur %}
             {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt2_rte_alltime
+          unique_id: batt2_rte_alltime
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.plug_in_battery_2_energy_import') | float(0) %}
+            {% set e = states('sensor.plug_in_battery_2_energy_export') | float(0) %}
+            {% if i > 0 %}
+              {% set rte = e / i * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
         - name: batt3_rte_24h
           unique_id: batt3_rte_24h
           state_class: measurement
@@ -554,6 +578,18 @@ homewizard_rte_package:
             {% set i = i_last if i_last > 0 else i_cur %}
             {% set e = e_last if i_last > 0 else e_cur %}
             {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt3_rte_alltime
+          unique_id: batt3_rte_alltime
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.plug_in_battery_3_energy_import') | float(0) %}
+            {% set e = states('sensor.plug_in_battery_3_energy_export') | float(0) %}
+            {% if i > 0 %}
+              {% set rte = e / i * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
         - name: batt4_rte_24h
           unique_id: batt4_rte_24h
           state_class: measurement
@@ -636,6 +672,18 @@ homewizard_rte_package:
             {% set i = i_last if i_last > 0 else i_cur %}
             {% set e = e_last if i_last > 0 else e_cur %}
             {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: batt4_rte_alltime
+          unique_id: batt4_rte_alltime
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:battery-charging-outline
+          state: >-
+            {% set i = states('sensor.plug_in_battery_4_energy_import') | float(0) %}
+            {% set e = states('sensor.plug_in_battery_4_energy_export') | float(0) %}
+            {% if i > 0 %}
+              {% set rte = e / i * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
         - name: totaal_rte_24h
           unique_id: totaal_rte_24h
           state_class: measurement
@@ -718,6 +766,18 @@ homewizard_rte_package:
             {% set i = i_last if i_last > 0 else i_cur %}
             {% set e = e_last if i_last > 0 else e_cur %}
             {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}
+        - name: totaal_rte_alltime
+          unique_id: totaal_rte_alltime
+          state_class: measurement
+          unit_of_measurement: '%'
+          icon: mdi:chart-donut
+          state: >-
+            {% set i = states('sensor.plug_in_battery_1_energy_import') | float(0) + states('sensor.plug_in_battery_2_energy_import') | float(0) + states('sensor.plug_in_battery_3_energy_import') | float(0) + states('sensor.plug_in_battery_4_energy_import') | float(0) %}
+            {% set e = states('sensor.plug_in_battery_1_energy_export') | float(0) + states('sensor.plug_in_battery_2_energy_export') | float(0) + states('sensor.plug_in_battery_3_energy_export') | float(0) + states('sensor.plug_in_battery_4_energy_export') | float(0) %}
+            {% if i > 0 %}
+              {% set rte = e / i * 100 %}
+              {% if rte > 100 %}{{ 100.0 }}{% elif rte < 0 %}{{ 0.0 }}{% else %}{{ rte | round(1) }}{% endif %}
+            {% else %}unknown{% endif %}
 
 # ============================================================
 # TOELICHTING
@@ -741,6 +801,10 @@ homewizard_rte_package:
 #
 # Let op: er zijn GEEN 30d/90d/365d rolling windows mogelijk met een korte
 # recorder-retentie (de statistics-sensor leest alleen ruwe history).
+#
+# all_time: lifetime totalen (native energy_import/export, cumulatief sinds
+#   installatie). Geen history of SOC-correctie nodig -> altijd geldig,
+#   onafhankelijk van purge_keep_days.
 #
 # Verwijder na de eerste installatie eventueel oude entity-registraties
 # (*_rte_30d/90d/365d en *_soc_delta_30d/90d/365d) als die niet meer bestaan:
