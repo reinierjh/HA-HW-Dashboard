@@ -258,24 +258,35 @@ $dash.Add('    path: rte_overzicht')
 $dash.Add('    type: sections')
 $dash.Add('    sections:')
 
-$cols = @('24h', '7d', 'weekly', 'monthly', 'quarterly', 'yearly', 'alltime')
+foreach ($b in $batteries) {
 $dash.Add('      - type: grid')
 $dash.Add('        cards:')
-$dash.Add('          - type: markdown')
-$dash.Add('            content: |-')
-$dash.Add("              {% macro pct(v) %}{% if v not in ['unknown', 'unavailable', 'none', ''] %}{{ v }}{% else %}&#8211;{% endif %}{% endmacro %}")
-$head = '              | Batterij'
-foreach ($c in $cols) { $head += " | $c" }
-$dash.Add($head + ' |')
-$dash.Add('              |' + ('---|' * ($cols.Count + 1)))
-foreach ($b in $batteries) {
-  $row = "              | Batterij $($b.Id)"
-  foreach ($c in $cols) { $row += " | {{ pct(states('sensor.batt$($b.Id)_rte_$c')) }}" }
-  $dash.Add($row + ' |')
+$dash.Add('          - type: heading')
+$dash.Add("            heading: Batterij $($b.Id)")
+$dash.Add('            heading_style: title')
+$dash.Add('          - type: entities')
+$dash.Add('            entities:')
+foreach ($p in $periods) {
+  $dash.Add("              - entity: sensor.batt$($b.Id)_rte_$($p.Key)")
+  $dash.Add("                name: RTE $($p.Key)")
 }
-$row = '              | Totaal'
-foreach ($c in $cols) { $row += " | {{ pct(states('sensor.totaal_rte_$c')) }}" }
-$dash.Add($row + ' |')
+$dash.Add("              - entity: sensor.batt$($b.Id)_rte_alltime")
+$dash.Add('                name: RTE alltime')
+}
+
+$dash.Add('      - type: grid')
+$dash.Add('        cards:')
+$dash.Add('          - type: heading')
+$dash.Add('            heading: Totaal')
+$dash.Add('            heading_style: title')
+$dash.Add('          - type: entities')
+$dash.Add('            entities:')
+foreach ($p in $periods) {
+  $dash.Add("              - entity: sensor.totaal_rte_$($p.Key)")
+  $dash.Add("                name: RTE $($p.Key)")
+}
+$dash.Add('              - entity: sensor.totaal_rte_alltime')
+$dash.Add('                name: RTE alltime')
 
 foreach ($p in $periods) {
   $dash.Add('      - type: grid')

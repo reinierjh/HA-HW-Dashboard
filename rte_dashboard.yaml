@@ -5,16 +5,109 @@ views:
     sections:
       - type: grid
         cards:
-          - type: markdown
-            content: |-
-              {% macro pct(v) %}{% if v not in ['unknown', 'unavailable', 'none', ''] %}{{ v }}{% else %}&#8211;{% endif %}{% endmacro %}
-              | Batterij | 24h | 7d | weekly | monthly | quarterly | yearly | alltime |
-              |---|---|---|---|---|---|---|---|
-              | Batterij 1 | {{ pct(states('sensor.batt1_rte_24h')) }} | {{ pct(states('sensor.batt1_rte_7d')) }} | {{ pct(states('sensor.batt1_rte_weekly')) }} | {{ pct(states('sensor.batt1_rte_monthly')) }} | {{ pct(states('sensor.batt1_rte_quarterly')) }} | {{ pct(states('sensor.batt1_rte_yearly')) }} | {{ pct(states('sensor.batt1_rte_alltime')) }} |
-              | Batterij 2 | {{ pct(states('sensor.batt2_rte_24h')) }} | {{ pct(states('sensor.batt2_rte_7d')) }} | {{ pct(states('sensor.batt2_rte_weekly')) }} | {{ pct(states('sensor.batt2_rte_monthly')) }} | {{ pct(states('sensor.batt2_rte_quarterly')) }} | {{ pct(states('sensor.batt2_rte_yearly')) }} | {{ pct(states('sensor.batt2_rte_alltime')) }} |
-              | Batterij 3 | {{ pct(states('sensor.batt3_rte_24h')) }} | {{ pct(states('sensor.batt3_rte_7d')) }} | {{ pct(states('sensor.batt3_rte_weekly')) }} | {{ pct(states('sensor.batt3_rte_monthly')) }} | {{ pct(states('sensor.batt3_rte_quarterly')) }} | {{ pct(states('sensor.batt3_rte_yearly')) }} | {{ pct(states('sensor.batt3_rte_alltime')) }} |
-              | Batterij 4 | {{ pct(states('sensor.batt4_rte_24h')) }} | {{ pct(states('sensor.batt4_rte_7d')) }} | {{ pct(states('sensor.batt4_rte_weekly')) }} | {{ pct(states('sensor.batt4_rte_monthly')) }} | {{ pct(states('sensor.batt4_rte_quarterly')) }} | {{ pct(states('sensor.batt4_rte_yearly')) }} | {{ pct(states('sensor.batt4_rte_alltime')) }} |
-              | Totaal | {{ pct(states('sensor.totaal_rte_24h')) }} | {{ pct(states('sensor.totaal_rte_7d')) }} | {{ pct(states('sensor.totaal_rte_weekly')) }} | {{ pct(states('sensor.totaal_rte_monthly')) }} | {{ pct(states('sensor.totaal_rte_quarterly')) }} | {{ pct(states('sensor.totaal_rte_yearly')) }} | {{ pct(states('sensor.totaal_rte_alltime')) }} |
+          - type: heading
+            heading: Batterij 1
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.batt1_rte_24h
+                name: RTE 24h
+              - entity: sensor.batt1_rte_7d
+                name: RTE 7d
+              - entity: sensor.batt1_rte_weekly
+                name: RTE weekly
+              - entity: sensor.batt1_rte_monthly
+                name: RTE monthly
+              - entity: sensor.batt1_rte_quarterly
+                name: RTE quarterly
+              - entity: sensor.batt1_rte_yearly
+                name: RTE yearly
+              - entity: sensor.batt1_rte_alltime
+                name: RTE alltime
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 2
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.batt2_rte_24h
+                name: RTE 24h
+              - entity: sensor.batt2_rte_7d
+                name: RTE 7d
+              - entity: sensor.batt2_rte_weekly
+                name: RTE weekly
+              - entity: sensor.batt2_rte_monthly
+                name: RTE monthly
+              - entity: sensor.batt2_rte_quarterly
+                name: RTE quarterly
+              - entity: sensor.batt2_rte_yearly
+                name: RTE yearly
+              - entity: sensor.batt2_rte_alltime
+                name: RTE alltime
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 3
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.batt3_rte_24h
+                name: RTE 24h
+              - entity: sensor.batt3_rte_7d
+                name: RTE 7d
+              - entity: sensor.batt3_rte_weekly
+                name: RTE weekly
+              - entity: sensor.batt3_rte_monthly
+                name: RTE monthly
+              - entity: sensor.batt3_rte_quarterly
+                name: RTE quarterly
+              - entity: sensor.batt3_rte_yearly
+                name: RTE yearly
+              - entity: sensor.batt3_rte_alltime
+                name: RTE alltime
+      - type: grid
+        cards:
+          - type: heading
+            heading: Batterij 4
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.batt4_rte_24h
+                name: RTE 24h
+              - entity: sensor.batt4_rte_7d
+                name: RTE 7d
+              - entity: sensor.batt4_rte_weekly
+                name: RTE weekly
+              - entity: sensor.batt4_rte_monthly
+                name: RTE monthly
+              - entity: sensor.batt4_rte_quarterly
+                name: RTE quarterly
+              - entity: sensor.batt4_rte_yearly
+                name: RTE yearly
+              - entity: sensor.batt4_rte_alltime
+                name: RTE alltime
+      - type: grid
+        cards:
+          - type: heading
+            heading: Totaal
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.totaal_rte_24h
+                name: RTE 24h
+              - entity: sensor.totaal_rte_7d
+                name: RTE 7d
+              - entity: sensor.totaal_rte_weekly
+                name: RTE weekly
+              - entity: sensor.totaal_rte_monthly
+                name: RTE monthly
+              - entity: sensor.totaal_rte_quarterly
+                name: RTE quarterly
+              - entity: sensor.totaal_rte_yearly
+                name: RTE yearly
+              - entity: sensor.totaal_rte_alltime
+                name: RTE alltime
       - type: grid
         cards:
           - type: custom:apexcharts-card
