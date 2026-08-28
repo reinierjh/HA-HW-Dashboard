@@ -70,18 +70,21 @@ foreach ($b in $batteries) {
     $pkg.Add('    - platform: statistics')
     $pkg.Add("      entity_id: $($b.Import)")
     $pkg.Add("      name: batt$($b.Id)_import_$($w.Key)")
+    $pkg.Add("      unique_id: batt$($b.Id)_import_$($w.Key)")
     $pkg.Add('      state_characteristic: sum_differences')
     $pkg.Add('      max_age:')
     $pkg.Add("        $($w.Age)")
     $pkg.Add('    - platform: statistics')
     $pkg.Add("      entity_id: $($b.Export)")
     $pkg.Add("      name: batt$($b.Id)_export_$($w.Key)")
+    $pkg.Add("      unique_id: batt$($b.Id)_export_$($w.Key)")
     $pkg.Add('      state_characteristic: sum_differences')
     $pkg.Add('      max_age:')
     $pkg.Add("        $($w.Age)")
     $pkg.Add('    - platform: statistics')
     $pkg.Add("      entity_id: $($b.Soc)")
     $pkg.Add("      name: batt$($b.Id)_soc_delta_$($w.Key)")
+    $pkg.Add("      unique_id: batt$($b.Id)_soc_delta_$($w.Key)")
     $pkg.Add('      state_characteristic: change')
     $pkg.Add('      max_age:')
     $pkg.Add("        $($w.Age)")
@@ -94,9 +97,11 @@ foreach ($b in $batteries) {
     $pkg.Add("    batt$($b.Id)_import_$($m.Key):")
     $pkg.Add("      source: $($b.Import)")
     $pkg.Add("      cycle: $($m.Cycle)")
+    $pkg.Add("      unique_id: batt$($b.Id)_import_$($m.Key)")
     $pkg.Add("    batt$($b.Id)_export_$($m.Key):")
     $pkg.Add("      source: $($b.Export)")
     $pkg.Add("      cycle: $($m.Cycle)")
+    $pkg.Add("      unique_id: batt$($b.Id)_export_$($m.Key)")
   }
 }
 $pkg.Add('')
@@ -132,8 +137,12 @@ foreach ($b in $batteries) {
     $pkg.Add("          unit_of_measurement: '%'")
     $pkg.Add('          icon: mdi:battery-charging-outline')
     $pkg.Add('          state: >-')
-    $pkg.Add("            {% set i = state_attr('$impId', 'last_period') | float(0) %}")
-    $pkg.Add("            {% set e = state_attr('$expId', 'last_period') | float(0) %}")
+    $pkg.Add("            {% set i_last = state_attr('$impId', 'last_period') | float(0) %}")
+    $pkg.Add("            {% set e_last = state_attr('$expId', 'last_period') | float(0) %}")
+    $pkg.Add("            {% set i_cur = states('$impId') | float(0) %}")
+    $pkg.Add("            {% set e_cur = states('$expId') | float(0) %}")
+    $pkg.Add('            {% set i = i_last if i_last > 0 else i_cur %}')
+    $pkg.Add('            {% set e = e_last if i_last > 0 else e_cur %}')
     $pkg.Add('            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}')
   }
 }
@@ -160,16 +169,22 @@ foreach ($w in $roll) {
 }
 
 foreach ($m in $meters) {
-  $imps = ($batteries | ForEach-Object { "state_attr('sensor.batt$($_.Id)_import_$($m.Key)', 'last_period') | float(0)" }) -join ' + '
-  $exps = ($batteries | ForEach-Object { "state_attr('sensor.batt$($_.Id)_export_$($m.Key)', 'last_period') | float(0)" }) -join ' + '
+  $impsLast = ($batteries | ForEach-Object { "state_attr('sensor.batt$($_.Id)_import_$($m.Key)', 'last_period') | float(0)" }) -join ' + '
+  $expsLast = ($batteries | ForEach-Object { "state_attr('sensor.batt$($_.Id)_export_$($m.Key)', 'last_period') | float(0)" }) -join ' + '
+  $impsCur = ($batteries | ForEach-Object { "states('sensor.batt$($_.Id)_import_$($m.Key)') | float(0)" }) -join ' + '
+  $expsCur = ($batteries | ForEach-Object { "states('sensor.batt$($_.Id)_export_$($m.Key)') | float(0)" }) -join ' + '
   $pkg.Add("        - name: totaal_rte_$($m.Key)")
   $pkg.Add("          unique_id: totaal_rte_$($m.Key)")
   $pkg.Add('          state_class: measurement')
   $pkg.Add("          unit_of_measurement: '%'")
   $pkg.Add('          icon: mdi:chart-donut')
   $pkg.Add('          state: >-')
-  $pkg.Add("            {% set i = $imps %}")
-  $pkg.Add("            {% set e = $exps %}")
+  $pkg.Add("            {% set i_last = $impsLast %}")
+  $pkg.Add("            {% set e_last = $expsLast %}")
+  $pkg.Add("            {% set i_cur = $impsCur %}")
+  $pkg.Add("            {% set e_cur = $expsCur %}")
+  $pkg.Add('            {% set i = i_last if i_last > 0 else i_cur %}')
+  $pkg.Add('            {% set e = e_last if i_last > 0 else e_cur %}')
   $pkg.Add('            {% if i > 0 %}{{ (e / i * 100) | round(1) }}{% else %}unknown{% endif %}')
 }
 $pkg.Add('')
@@ -183,9 +198,15 @@ $pkg.Add('#   niet even gevuld hoeft te zijn (was de oorzaak van bizar hoge waar
 $pkg.Add('#')
 $pkg.Add('# weekly..yearly: kalenderperiodes via utility_meter. last_period wordt door de')
 $pkg.Add('#   meter zelf bijgehouden en na een restart hersteld uit de restore-data in de DB,')
-$pkg.Add('#   dus zonder lange ruwe history -> werkt ook met purge_keep_days: 7.')
+$pkg.Add('#   dus zonder lange ruwe history -> werkt ook met een korte retentie.')
 $pkg.Add('#   Over zulke lange periodes is SOC-correctie niet nodig (grensafwijking is')
 $pkg.Add('#   verwaarloosbaar t.o.v. de totale doorloop).')
+$pkg.Add('#')
+$pkg.Add('#   Tot de eerste periode-omwenteling is last_period leeg; dan toont de RTE-sensor')
+$pkg.Add('#   de LOPENDE periode (native value van de meter) als fallback, zodat je direct')
+$pkg.Add('#   waarden ziet. Na elke omwenteling (weekly: maandagnacht, monthly: 1e van de')
+$pkg.Add('#   maand, quarterly: 1 jan/apr/jul/okt, yearly: 1 jan) wordt de voltooide periode')
+$pkg.Add('#   getoond.')
 $pkg.Add('#')
 $pkg.Add('# Let op: er zijn GEEN 30d/90d/365d rolling windows mogelijk met een korte')
 $pkg.Add('# recorder-retentie (de statistics-sensor leest alleen ruwe history).')
